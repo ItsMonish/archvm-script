@@ -165,23 +165,23 @@ install_blackarch() {
 #---------------------------------------------------------------------------------
 configure_fish_and_kitty() {
 
-    fish -c 'set -U fish_greeting'
+    su - "$USERNAME" -c "fish -c 'set -U fish_greeting'"
     su - "$USERNAME" -c "echo '$BASHRC_4_FISH' >> /home/$USERNAME/.bashrc"
-    fish -c "curl -sL \
+    su - "$USERNAME" -c 'fish -c "curl -sL \
     https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | \
-    source && fisher install jorgebucaran/fisher"
-    fish -c "fisher install ilancosman/tide@v6"
-    fish -c "fisher install jorgebucaran/autopair.fish"
-    fish -c "fisher install franciscolourenco/done"
-    fish -c "fisher install PatrickF1/fzf.fish"
+    source && fisher install jorgebucaran/fisher"'
+    su - "$USERNAME" -c 'fish -c "fisher install ilancosman/tide@v6"'
+    su - "$USERNAME" -c 'fish -c "fisher install jorgebucaran/autopair.fish"'
+    su - "$USERNAME" -c 'fish -c "fisher install franciscolourenco/done"'
+    su - "$USERNAME" -c 'fish -c "fisher install PatrickF1/fzf.fish"'
 
-    if [ -z $DE ];
+    if [ ! $DE = "" ];
     then
         su - $USERNAME -c "mkdir -p /home/"$USERNAME"/.config/kitty"
         su - $USERNAME -c \
         "curl \
         https://raw.githubusercontent.com/ItsMonish/archvm-script/refs/heads/master/conf/kitty.conf \
-        -o /home/"$USERNAME"/.confing/kitty/kitty.conf"
+        -o /home/$USERNAME/.config/kitty/kitty.conf"
     fi
 
 }
@@ -223,6 +223,7 @@ main() {
     configure_fish_and_kitty
 
     sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+    sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 
     info "*** Installation on chroot system is done ***"
 
