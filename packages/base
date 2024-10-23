@@ -3,3 +3,4 @@ wget
 fzf
 bat
 fd
+fastfetch
