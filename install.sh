@@ -297,7 +297,7 @@ install_base() {
 #---------------------------------------------------------------------------------
 pull_files() {
 
-    BASE_LINK="http://192.168.122.1:8000"
+    BASE_LINK="https://raw.githubusercontent.com/ItsMonish/archvm-script/refs/heads/master"
     HOST_SETUP="setup-host.sh"
     BASE_NO_GUI="packages/base"
     BASE_GUI="packages/base-gui"
