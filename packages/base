@@ -1,2 +1,5 @@
 fish
 wget
+fzf
+bat
+fd

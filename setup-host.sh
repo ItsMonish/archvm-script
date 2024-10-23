@@ -9,6 +9,17 @@ LIGHT_BLUE='\033[1;34m'
 NC='\033[0m'
 
 #---------------------------------------------------------------------------------
+# Contents for .bashrc file to bring fish when opening terminal in 
+# interactive mode
+#---------------------------------------------------------------------------------
+BASHRC_4_FISH="
+if [[ \$(ps --no-header --pid=\$PPID --format=comm) != "fish" && -z \${BASH_EXECUTION_STRING} ]]
+then
+    shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=''
+    exec fish \$LOGIN_OPTION
+fi"
+
+#---------------------------------------------------------------------------------
 # Throw error and exit
 #---------------------------------------------------------------------------------
 fatal() {
@@ -150,6 +161,32 @@ install_blackarch() {
 }
 
 #---------------------------------------------------------------------------------
+# Configures fish and kitty
+#---------------------------------------------------------------------------------
+configure_fish_and_kitty() {
+
+    fish -c 'set -U fish_greeting'
+    su - "$USERNAME" -c "echo '$BASHRC_4_FISH' >> /home/$USERNAME/.bashrc"
+    fish -c "curl -sL \
+    https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | \
+    source && fisher install jorgebucaran/fisher"
+    fish -c "fisher install ilancosman/tide@v6"
+    fish -c "fisher install jorgebucaran/autopair.fish"
+    fish -c "fisher install franciscolourenco/done"
+    fish -c "fisher install PatrickF1/fzf.fish"
+
+    if [ -z $DE ];
+    then
+        su - $USERNAME -c "mkdir -p /home/"$USERNAME"/.config/kitty"
+        su - $USERNAME -c \
+        "curl \
+        https://raw.githubusercontent.com/ItsMonish/archvm-script/refs/heads/master/conf/kitty.conf \
+        -o /home/"$USERNAME"/.confing/kitty/kitty.conf"
+    fi
+
+}
+
+#---------------------------------------------------------------------------------
 # Main driver function
 #---------------------------------------------------------------------------------
 main() {
@@ -182,6 +219,8 @@ main() {
     then
         install_blackarch
     fi
+
+    configure_fish_and_kitty
 
     sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
