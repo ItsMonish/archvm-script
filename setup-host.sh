@@ -129,7 +129,7 @@ install_gui() {
 
     echo $PACKAGES
 
-    su - $USERNAME -c "yay -S --noconfirm $PACKAGES"
+    su - $USERNAME -c "yay --disable-download-timeout -S --noconfirm $PACKAGES"
 
     okay "Installed required components"
 
@@ -199,7 +199,7 @@ main() {
 
     info "*** Installing git and grub ***"
 
-    pacman -S --noconfirm grub efibootmgr git go
+    pacman --disable-download-timeout -S --noconfirm grub efibootmgr git go
 
     install_yay
 
@@ -210,7 +210,7 @@ main() {
         info "*** No Window Manger or Desktop Environment is installed \
             as None as selected ***"
         info "*** Installing necessary packages ***"
-        su - $USERNAME -c 'yay -S --noconfirm $PACKAGES'
+        su - $USERNAME -c 'yay --disable-download-timeout -S --noconfirm $PACKAGES'
     else
         install_gui
     fi
