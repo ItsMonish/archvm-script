@@ -204,7 +204,7 @@ main() {
 
     info "*** Installing git and grub ***"
 
-    pacman --disable-download-timeout -S --noconfirm grub efibootmgr git go
+    pacman --disable-download-timeout -S --noconfirm grub efibootmgr git go os-prober
 
     install_yay
 
