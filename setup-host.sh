@@ -197,6 +197,11 @@ main() {
 
     configure_system
 
+    info "*** Updating keyrings ***"
+
+    pacman-key --init
+    pacman-key --populate archlinux
+
     info "*** Installing git and grub ***"
 
     pacman --disable-download-timeout -S --noconfirm grub efibootmgr git go
